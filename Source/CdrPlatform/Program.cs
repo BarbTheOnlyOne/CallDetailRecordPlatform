@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<CdrDbContext>(options => 
-    options.UseSqlite(builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
