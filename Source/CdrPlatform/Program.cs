@@ -16,40 +16,150 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/dbtest/insert", async (CdrDbContext context) =>
+app.MapGet("/", () => "Welcome to the awesome CDR Platfom!");
+app.MapGet("/api/records", async (CdrDbContext context) =>
 {
-    var testRecord = new CallDetailRecord
+    List<CallDetailRecord> records;
+    try
     {
-        CallerId = 1234567890,
-        Recipient = 987456321,
-        CallDate = DateOnly.FromDateTime(DateTime.Now),
-        EndTime = TimeSpan.FromMinutes(12),
-        Duration = 42,
-        Cost = 20,
-        Reference = "TestReference",
-        Currency = Currency.GBP
-    };
-    
-    app.Logger.LogInformation("Inserting record {@testRecord}", testRecord);
-    
-    context.CallDetailRecords.Add(testRecord);
-    
-    await context.SaveChangesAsync();
-    
-    app.Logger.LogInformation($"Inserted record & saved to DB.");
-    
-    return Results.Ok("Inserted test record");
-});
+        records = await context.CallDetailRecords.ToListAsync();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching records: {error}", e.Message);
+        return Results.Problem("Error while fetching records", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
 
-app.MapGet("/dbtest/get", async (CdrDbContext context) =>
-{
-    var records = await context.CallDetailRecords.ToListAsync();
-    
-    app.Logger.LogInformation("Fetched {numberOfRecords} records from DB.", records.Count);
-    
     return Results.Ok(records);
+});
+app.MapGet("/api/records/{callerId}", async (int callerId, CdrDbContext context) =>
+{
+    List<CallDetailRecord> records;
+    try
+    {
+        records = await context.CallDetailRecords.Where(r => r.CallerId == callerId).ToListAsync();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+
+    return records.Count == 0 ? Results.NotFound() : Results.Ok(records);
+});
+app.MapGet("/api/records/{callerId}/{year}/{month}", (int callerId, int year, int month, CdrDbContext context) =>
+{
+    List<CallDetailRecord> records;
+    try
+    {
+        records = context.CallDetailRecords
+            .Where(r => r.CallerId == callerId && r.CallDate.Year == year && r.CallDate.Month == month)
+            .ToList();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+    
+    return records.Count == 0 ? Results.NotFound() : Results.Ok(records);
+});
+app.MapGet("/api/costs/{callerId}/{year}/{month}", (int callerId, int year, int month, CdrDbContext context) =>
+{
+    List<decimal> costs;
+    try
+    {
+        costs = context.CallDetailRecords
+            .Where(r => r.CallerId == callerId && r.CallDate.Year == year && r.CallDate.Month == month)
+            .Select(r => r.Cost)
+            .ToList();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+    
+    return costs.Count == 0 ? Results.NotFound() : Results.Ok(costs);
+});
+app.MapGet("/api/costs/{callerId}/{year}", (int callerId, int year, CdrDbContext context) =>
+{
+    List<decimal> costs;
+    try
+    {
+        costs = context.CallDetailRecords
+            .Where(r => r.CallerId == callerId && r.CallDate.Year == year)
+            .Select(r => r.Cost)
+            .ToList();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+    
+    return costs.Count == 0 ? Results.NotFound() : Results.Ok(costs);
+});
+app.MapGet("/api/record/{recordReference}", (string recordReference, CdrDbContext context) =>
+{
+    CallDetailRecord? record;
+    try
+    {
+        record = context.CallDetailRecords
+            .FirstOrDefault(r => r.Reference == recordReference);
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+    
+    return record == null ? Results.NotFound() : Results.Ok(record);
+});
+app.MapGet("/api/currencies", (CdrDbContext context) =>
+{
+    List<Currency> currencies;
+    try
+    {
+        currencies = context.CallDetailRecords
+            .Select(r => r.Currency)
+            .Distinct()
+            .ToList();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+
+    return currencies.Count == 0 ? Results.NotFound() : Results.Ok(currencies);
+});
+app.MapGet("/api/currencies/{callerId}", (int callerId, CdrDbContext context) =>
+{
+    List<Currency> currencies;
+    try
+    {
+        currencies = context.CallDetailRecords
+            .Where(r => r.CallerId == callerId)
+            .Select(r => r.Currency)
+            .Distinct()
+            .ToList();
+    }
+    catch (Exception e)
+    {
+        app.Logger.LogError("Error while fetching record: {error}", e.Message);
+        return Results.Problem("Error while fetching record", 
+            statusCode: StatusCodes.Status500InternalServerError);
+    }
+
+    return currencies.Count == 0 ? Results.NotFound() : Results.Ok(currencies);
 });
 
 // Ensure it exists somewhere, not ideal as migrations apparently
