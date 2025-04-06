@@ -1,6 +1,6 @@
 using CdrPlatform.Abstractions;
 
-namespace CdrPlatform.Models;
+namespace CdrPlatform.Dtos;
 
 /// <summary>
 /// Dto for inserting/updating the call detail record.
