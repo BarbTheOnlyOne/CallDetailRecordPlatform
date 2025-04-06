@@ -29,9 +29,13 @@ app.MapGet("/dbtest/insert", async (CdrDbContext context) =>
         Currency = Currency.GBP
     };
     
+    app.Logger.LogInformation("Inserting record {@testRecord}", testRecord);
+    
     context.CallDetailRecords.Add(testRecord);
     
     await context.SaveChangesAsync();
+    
+    app.Logger.LogInformation($"Inserted record & saved to DB.");
     
     return Results.Ok("Inserted test record");
 });
@@ -39,6 +43,9 @@ app.MapGet("/dbtest/insert", async (CdrDbContext context) =>
 app.MapGet("/dbtest/get", async (CdrDbContext context) =>
 {
     var records = await context.CallDetailRecords.ToListAsync();
+    
+    app.Logger.LogInformation("Fetched {numberOfRecords} records from DB.", records.Count);
+    
     return Results.Ok(records);
 });
 
