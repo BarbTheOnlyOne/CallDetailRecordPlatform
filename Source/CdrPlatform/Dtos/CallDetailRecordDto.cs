@@ -3,7 +3,7 @@ using CdrPlatform.Abstractions;
 namespace CdrPlatform.Dtos;
 
 /// <summary>
-/// Dto for passing back the date about a record from the DB.
+/// Dto for passing back the data about a record from the DB.
 /// </summary>
 /// <param name="Id">ID of the entry in the DB.</param>
 /// <param name="CallerId">Phone number if the caller including the country code (i.e. 420 for CZ).</param>
