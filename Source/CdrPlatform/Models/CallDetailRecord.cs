@@ -13,6 +13,7 @@ namespace CdrPlatform.Models;
 /// </summary>
 public class CallDetailRecord
 {
+    public int Id { get; set; }
     public int CallerId { get; set; }
     public int Recipient { get; set; }
     public DateOnly CallDate { get; set; }
