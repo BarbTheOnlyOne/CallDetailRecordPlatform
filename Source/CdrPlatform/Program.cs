@@ -1,6 +1,7 @@
 using CdrPlatform;
 using CdrPlatform.Abstractions;
 using CdrPlatform.Database;
+using CdrPlatform.Endpoints;
 using CdrPlatform.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

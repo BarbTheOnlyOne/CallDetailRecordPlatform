@@ -3,8 +3,12 @@ using CdrPlatform.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace CdrPlatform;
+namespace CdrPlatform.Endpoints;
 
+/// <summary>
+/// Class aggregating all the endpoints related to the records.
+/// Motivation behind this was to keep the logically related types of endpoints together, making it more clean and separated.
+/// </summary>
 public static class RecordEndpoints
 {
     public static RouteGroupBuilder MapRecordsApi(this RouteGroupBuilder groupBuilder)
@@ -18,6 +22,7 @@ public static class RecordEndpoints
         return groupBuilder;
     }
     
+    // Note: Although this is a call for a SINGLE record, it felt right to keep the family together.
     public static Results<Ok<CallDetailRecord>, ProblemHttpResult, NotFound> GetRecordByReferenceAsync(string reference, CdrDbContext context, ILogger logger)
     {
         CallDetailRecord? record;
