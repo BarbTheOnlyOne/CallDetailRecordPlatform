@@ -21,47 +21,8 @@ var app = builder.Build();
 app.MapGet("/", () => "Welcome to the awesome CDR Platform!");
 app.MapGroup("/api")
     .MapRecordsApi()
-    .MapCostsApi();
-
-app.MapGet("/api/currencies", (CdrDbContext context) =>
-{
-    List<Currency> currencies;
-    try
-    {
-        currencies = context.CallDetailRecords
-            .Select(r => r.Currency)
-            .Distinct()
-            .ToList();
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError("Error while fetching record: {error}", e.Message);
-        return Results.Problem("Error while fetching record", 
-            statusCode: StatusCodes.Status500InternalServerError);
-    }
-
-    return currencies.Count == 0 ? Results.NotFound() : Results.Ok(currencies);
-});
-app.MapGet("/api/currencies/{callerId}", (int callerId, CdrDbContext context) =>
-{
-    List<Currency> currencies;
-    try
-    {
-        currencies = context.CallDetailRecords
-            .Where(r => r.CallerId == callerId)
-            .Select(r => r.Currency)
-            .Distinct()
-            .ToList();
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError("Error while fetching record: {error}", e.Message);
-        return Results.Problem("Error while fetching record", 
-            statusCode: StatusCodes.Status500InternalServerError);
-    }
-
-    return currencies.Count == 0 ? Results.NotFound() : Results.Ok(currencies);
-});
+    .MapCostsApi()
+    .MapCurrenciesApi();
 
 // Ensure it exists somewhere, not ideal as migrations apparently
 using (var scope = app.Services.CreateAsyncScope())
