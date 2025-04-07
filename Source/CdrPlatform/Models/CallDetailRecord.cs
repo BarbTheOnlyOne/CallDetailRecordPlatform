@@ -14,8 +14,8 @@ namespace CdrPlatform.Models;
 public class CallDetailRecord
 {
     public int Id { get; set; }
-    public int CallerId { get; set; }
-    public int Recipient { get; set; }
+    public long CallerId { get; set; }
+    public long Recipient { get; set; }
     public DateOnly CallDate { get; set; }
     public TimeSpan EndTime { get; set; }
     public int Duration { get; set; }

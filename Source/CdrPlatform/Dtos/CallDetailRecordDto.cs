@@ -14,5 +14,5 @@ namespace CdrPlatform.Dtos;
 /// <param name="Cost">Price for the call.</param>
 /// <param name="Reference">Reference ID.</param>
 /// <param name="Currency">Currency of the price used for the call.</param>
-public record CallDetailRecordDto(int Id,int CallerId, int Recipient, DateOnly CallDate, TimeSpan EndTime, int Duration, 
+public record CallDetailRecordDto(int Id,long CallerId, long Recipient, DateOnly CallDate, TimeSpan EndTime, int Duration, 
     decimal Cost, string Reference, Currency Currency);
