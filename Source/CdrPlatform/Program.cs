@@ -1,3 +1,4 @@
+using CdrPlatform;
 using CdrPlatform.Abstractions;
 using CdrPlatform.Database;
 using CdrPlatform.Models;
@@ -16,57 +17,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Welcome to the awesome CDR Platfom!");
-app.MapGet("/api/records", async (CdrDbContext context) =>
-{
-    List<CallDetailRecord> records;
-    try
-    {
-        records = await context.CallDetailRecords.ToListAsync();
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError("Error while fetching records: {error}", e.Message);
-        return Results.Problem("Error while fetching records", 
-            statusCode: StatusCodes.Status500InternalServerError);
-    }
+app.MapGet("/", () => "Welcome to the awesome CDR Platform!");
+app.MapGroup("/api").MapRecordsApi();
 
-    return Results.Ok(records);
-});
-app.MapGet("/api/records/{callerId}", async (int callerId, CdrDbContext context) =>
-{
-    List<CallDetailRecord> records;
-    try
-    {
-        records = await context.CallDetailRecords.Where(r => r.CallerId == callerId).ToListAsync();
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError("Error while fetching record: {error}", e.Message);
-        return Results.Problem("Error while fetching record", 
-            statusCode: StatusCodes.Status500InternalServerError);
-    }
-
-    return records.Count == 0 ? Results.NotFound() : Results.Ok(records);
-});
-app.MapGet("/api/records/{callerId}/{year}/{month}", (int callerId, int year, int month, CdrDbContext context) =>
-{
-    List<CallDetailRecord> records;
-    try
-    {
-        records = context.CallDetailRecords
-            .Where(r => r.CallerId == callerId && r.CallDate.Year == year && r.CallDate.Month == month)
-            .ToList();
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError("Error while fetching record: {error}", e.Message);
-        return Results.Problem("Error while fetching record", 
-            statusCode: StatusCodes.Status500InternalServerError);
-    }
-    
-    return records.Count == 0 ? Results.NotFound() : Results.Ok(records);
-});
 app.MapGet("/api/costs/{callerId}/{year}/{month}", (int callerId, int year, int month, CdrDbContext context) =>
 {
     List<decimal> costs;
@@ -104,23 +57,6 @@ app.MapGet("/api/costs/{callerId}/{year}", (int callerId, int year, CdrDbContext
     }
     
     return costs.Count == 0 ? Results.NotFound() : Results.Ok(costs);
-});
-app.MapGet("/api/record/{recordReference}", (string recordReference, CdrDbContext context) =>
-{
-    CallDetailRecord? record;
-    try
-    {
-        record = context.CallDetailRecords
-            .FirstOrDefault(r => r.Reference == recordReference);
-    }
-    catch (Exception e)
-    {
-        app.Logger.LogError("Error while fetching record: {error}", e.Message);
-        return Results.Problem("Error while fetching record", 
-            statusCode: StatusCodes.Status500InternalServerError);
-    }
-    
-    return record == null ? Results.NotFound() : Results.Ok(record);
 });
 app.MapGet("/api/currencies", (CdrDbContext context) =>
 {
