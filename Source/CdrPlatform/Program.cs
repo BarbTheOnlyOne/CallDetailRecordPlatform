@@ -1,8 +1,5 @@
-using CdrPlatform;
-using CdrPlatform.Abstractions;
 using CdrPlatform.Database;
 using CdrPlatform.Endpoints;
-using CdrPlatform.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -10,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
-builder.Services.AddDbContext<CdrDbContext>(options => 
+builder.Services.AddDbContext<CdrDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddEndpointsApiExplorer();
