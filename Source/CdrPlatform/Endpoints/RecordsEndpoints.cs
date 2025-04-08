@@ -1,6 +1,7 @@
 using CdrPlatform.Database;
 using CdrPlatform.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CdrPlatform.Endpoints;
@@ -25,7 +26,7 @@ public static class RecordsEndpoints
 
     // Note: Although this is a call for a SINGLE record, it felt right to keep the family together.
     public static Results<Ok<CallDetailRecord>, ProblemHttpResult, NotFound> GetRecordByReferenceAsync(string reference,
-        CdrDbContext context, ILogger logger)
+        [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         CallDetailRecord? record;
         try
@@ -43,7 +44,7 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>> GetRecordsAsync(
-        CdrDbContext context, ILogger logger)
+        [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         List<CallDetailRecord> records;
         try
@@ -60,7 +61,7 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>> GetRecordsByCallerAsync(
-        long callerId, CdrDbContext context, ILogger logger)
+        long callerId, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         List<CallDetailRecord> records;
         try
@@ -77,7 +78,8 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>
-        GetRecordsByCallerAndMonthAsync(long callerId, int year, int month, CdrDbContext context, ILogger logger)
+        GetRecordsByCallerAndMonthAsync(long callerId, int year, int month, [FromServices] CdrDbContext context,
+            [FromServices] ILogger logger)
     {
         List<CallDetailRecord> records;
         try

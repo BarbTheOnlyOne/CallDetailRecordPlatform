@@ -1,5 +1,6 @@
 using CdrPlatform.Database;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CdrPlatform.Endpoints;
@@ -20,7 +21,7 @@ public static class CostsEndpoints
     }
 
     public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndMonthAsync(
-        long callerId, int year, int month, CdrDbContext context, ILogger logger)
+        long callerId, int year, int month, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         List<decimal> costs;
         try
@@ -40,7 +41,7 @@ public static class CostsEndpoints
     }
 
     public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndYearAsync(
-        long callerId, int year, CdrDbContext context, ILogger logger)
+        long callerId, int year, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         List<decimal> costs;
         try

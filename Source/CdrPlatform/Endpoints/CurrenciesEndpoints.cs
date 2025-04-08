@@ -1,6 +1,7 @@
 using CdrPlatform.Abstractions;
 using CdrPlatform.Database;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CdrPlatform.Endpoints;
@@ -21,7 +22,7 @@ public static class CurrenciesEndpoints
     }
 
     public static async Task<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>> GetCurrenciesAsync(
-        CdrDbContext context, ILogger logger)
+        [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         List<Currency> currencies;
         try
@@ -41,7 +42,7 @@ public static class CurrenciesEndpoints
     }
 
     public static async Task<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>> GetCurrenciesByCallerAsync(
-        long callerId, CdrDbContext context, ILogger logger)
+        long callerId, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
     {
         List<Currency> currencies;
         try
