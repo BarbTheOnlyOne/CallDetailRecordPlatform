@@ -41,7 +41,7 @@ public static class CurrenciesEndpoints
     }
 
     public static async Task<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>> GetCurrenciesByCallerAsync(
-        int callerId, CdrDbContext context, ILogger logger)
+        long callerId, CdrDbContext context, ILogger logger)
     {
         List<Currency> currencies;
         try
