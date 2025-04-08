@@ -60,7 +60,7 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>> GetRecordsByCallerAsync(
-        int callerId, CdrDbContext context, ILogger logger)
+        long callerId, CdrDbContext context, ILogger logger)
     {
         List<CallDetailRecord> records;
         try
@@ -77,7 +77,7 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>
-        GetRecordsByCallerAndMonthAsync(int callerId, int year, int month, CdrDbContext context, ILogger logger)
+        GetRecordsByCallerAndMonthAsync(long callerId, int year, int month, CdrDbContext context, ILogger logger)
     {
         List<CallDetailRecord> records;
         try
