@@ -8,9 +8,9 @@ namespace CdrPlatform.Tests
 {
     public class RecordsEndpointsTests
     {
-        public List<CallDetailRecord> ValidCallDetailRecords = new List<CallDetailRecord>
-        {
-            new CallDetailRecord
+        private readonly List<CallDetailRecord> _validCallDetailRecords =
+        [
+            new()
             {
                 Id = 1,
                 CallerId = 441215598896,
@@ -22,7 +22,7 @@ namespace CdrPlatform.Tests
                 Reference = "C5DA9724701EEBBA95CA2CC5617BA93E4",
                 Currency = Currency.GBP
             },
-            new CallDetailRecord
+            new()
             {
                 Id = 2,
                 CallerId = 442036401115,
@@ -34,14 +34,14 @@ namespace CdrPlatform.Tests
                 Reference = "C50B5A7BDB8D68B8512BB14A9D363CAA1",
                 Currency = Currency.Unknown
             }
-        };
+        ];
         
         [Fact]
         public void GetRecordByReferenceAsync_RecordNotFound_ReturnsNotFound()
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
 
             // Act
             var result = RecordsEndpoints.GetRecordByReferenceAsync("NONEXISTENTREFERENCE123", dbContext, NullLogger.Instance);
@@ -58,7 +58,7 @@ namespace CdrPlatform.Tests
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
             await dbContext.SaveChangesAsync();
 
             // Act
@@ -108,7 +108,7 @@ namespace CdrPlatform.Tests
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
             await dbContext.SaveChangesAsync();
 
             // Act
@@ -152,7 +152,7 @@ namespace CdrPlatform.Tests
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
             await dbContext.SaveChangesAsync();
 
             // Act
@@ -170,7 +170,7 @@ namespace CdrPlatform.Tests
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
             await dbContext.SaveChangesAsync();
             // Act
             var result = await RecordsEndpoints.GetRecordsByCallerAsync(441215598896, dbContext, NullLogger.Instance);
@@ -200,7 +200,7 @@ namespace CdrPlatform.Tests
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
             await dbContext.SaveChangesAsync();
 
             // Act
@@ -218,7 +218,7 @@ namespace CdrPlatform.Tests
         {
             // Arrange
             var dbContext = new MockDb().CreateDbContext();
-            dbContext.CallDetailRecords.AddRange(ValidCallDetailRecords);
+            dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
             await dbContext.SaveChangesAsync();
             // Act
             var result = await RecordsEndpoints.GetRecordsByCallerAndMonthAsync(441215598896, 2023, 10, dbContext, NullLogger.Instance);
