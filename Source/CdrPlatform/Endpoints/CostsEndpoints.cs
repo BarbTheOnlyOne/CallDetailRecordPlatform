@@ -40,7 +40,7 @@ public static class CostsEndpoints
     }
 
     public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndYearAsync(
-        long callerId, int year, int month, CdrDbContext context, ILogger logger)
+        long callerId, int year, CdrDbContext context, ILogger logger)
     {
         List<decimal> costs;
         try
