@@ -1,0 +1,65 @@
+using CdrPlatform.Database;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace CdrPlatform.Endpoints;
+
+// Dummy non-static class for ILogger category
+public class CostsEndpointsLoggerCategory { }
+
+/// <summary>
+///     Class aggregating all the endpoints related to the costs.
+///     Motivation behind this was to keep the logically related types of endpoints together, making it more clean and
+///     separated.
+/// </summary>
+public static class CostsEndpoints
+{
+    public static RouteGroupBuilder MapCostsApi(this RouteGroupBuilder groupBuilder)
+    {
+        groupBuilder.MapGet("/costs/{callerId}/{year}/{month}", GetCostsByCallerAndMonthAsync);
+        groupBuilder.MapGet("/costs/{callerId}/{year}", GetCostsByCallerAndYearAsync);
+
+        return groupBuilder;
+    }
+
+    public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndMonthAsync(
+        long callerId, int year, int month, [FromServices] CdrDbContext context, [FromServices] ILogger<CostsEndpointsLoggerCategory> logger)
+    {
+        List<decimal> costs;
+        try
+        {
+            costs = await context.CallDetailRecords
+                .Where(r => r.CallerId == callerId && r.CallDate.Year == year && r.CallDate.Month == month)
+                .Select(r => r.Cost)
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            logger.LogError("Error while fetching records: {error}", e.Message);
+            return TypedResults.Problem("Error while fetching records");
+        }
+
+        return costs.Count == 0 ? TypedResults.NotFound() : TypedResults.Ok(costs);
+    }
+
+    public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndYearAsync(
+        long callerId, int year, [FromServices] CdrDbContext context, [FromServices] ILogger<CostsEndpointsLoggerCategory> logger)
+    {
+        List<decimal> costs;
+        try
+        {
+            costs = await context.CallDetailRecords
+                .Where(r => r.CallerId == callerId && r.CallDate.Year == year)
+                .Select(r => r.Cost)
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            logger.LogError("Error while fetching records: {error}", e.Message);
+            return TypedResults.Problem("Error while fetching records");
+        }
+
+        return costs.Count == 0 ? TypedResults.NotFound() : TypedResults.Ok(costs);
+    }
+}
