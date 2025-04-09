@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CdrPlatform.Endpoints;
 
+// Dummy non-static class for ILogger category
+public class CostsEndpointsLoggerCategory { }
+
 /// <summary>
 ///     Class aggregating all the endpoints related to the costs.
 ///     Motivation behind this was to keep the logically related types of endpoints together, making it more clean and
@@ -21,7 +24,7 @@ public static class CostsEndpoints
     }
 
     public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndMonthAsync(
-        long callerId, int year, int month, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        long callerId, int year, int month, [FromServices] CdrDbContext context, [FromServices] ILogger<CostsEndpointsLoggerCategory> logger)
     {
         List<decimal> costs;
         try
@@ -41,7 +44,7 @@ public static class CostsEndpoints
     }
 
     public static async Task<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>> GetCostsByCallerAndYearAsync(
-        long callerId, int year, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        long callerId, int year, [FromServices] CdrDbContext context, [FromServices] ILogger<CostsEndpointsLoggerCategory> logger)
     {
         List<decimal> costs;
         try

@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CdrPlatform.Endpoints;
 
+// Dummy non-static class for ILogger category
+public class RecordsEndpointsLoggerCategory { }
+
 /// <summary>
 ///     Class aggregating all the endpoints related to the records.
 ///     Motivation behind this was to keep the logically related types of endpoints together, making it more clean and
@@ -26,7 +29,7 @@ public static class RecordsEndpoints
 
     // Note: Although this is a call for a SINGLE record, it felt right to keep the family together.
     public static Results<Ok<CallDetailRecord>, ProblemHttpResult, NotFound> GetRecordByReferenceAsync(string reference,
-        [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        [FromServices] CdrDbContext context, [FromServices] ILogger<RecordsEndpointsLoggerCategory> logger)
     {
         CallDetailRecord? record;
         try
@@ -44,7 +47,7 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>> GetRecordsAsync(
-        [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        [FromServices] CdrDbContext context, [FromServices] ILogger<RecordsEndpointsLoggerCategory> logger)
     {
         List<CallDetailRecord> records;
         try
@@ -61,7 +64,7 @@ public static class RecordsEndpoints
     }
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>> GetRecordsByCallerAsync(
-        long callerId, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        long callerId, [FromServices] CdrDbContext context, [FromServices] ILogger<RecordsEndpointsLoggerCategory> logger)
     {
         List<CallDetailRecord> records;
         try
@@ -79,7 +82,7 @@ public static class RecordsEndpoints
 
     public static async Task<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>
         GetRecordsByCallerAndMonthAsync(long callerId, int year, int month, [FromServices] CdrDbContext context,
-            [FromServices] ILogger logger)
+            [FromServices] ILogger<RecordsEndpointsLoggerCategory> logger)
     {
         List<CallDetailRecord> records;
         try

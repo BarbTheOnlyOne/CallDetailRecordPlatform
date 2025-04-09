@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CdrPlatform.Endpoints;
 
+// Dummy non-static class for ILogger category
+public class CurrenciesEndpointsLoggerCategory { }
+
 /// <summary>
 ///     Class aggregating all the endpoints related to the currencies.
 ///     Motivation behind this was to keep the logically related types of endpoints together, making it more clean and
@@ -22,7 +25,7 @@ public static class CurrenciesEndpoints
     }
 
     public static async Task<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>> GetCurrenciesAsync(
-        [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        [FromServices] CdrDbContext context, [FromServices] ILogger<CurrenciesEndpointsLoggerCategory> logger)
     {
         List<Currency> currencies;
         try
@@ -42,7 +45,7 @@ public static class CurrenciesEndpoints
     }
 
     public static async Task<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>> GetCurrenciesByCallerAsync(
-        long callerId, [FromServices] CdrDbContext context, [FromServices] ILogger logger)
+        long callerId, [FromServices] CdrDbContext context, [FromServices] ILogger<CurrenciesEndpointsLoggerCategory> logger)
     {
         List<Currency> currencies;
         try

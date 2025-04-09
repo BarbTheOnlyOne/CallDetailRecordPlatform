@@ -1,9 +1,16 @@
 using CdrPlatform.Database;
 using CdrPlatform.Endpoints;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddSerilog();
+});
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
