@@ -8,16 +8,17 @@ namespace CdrPlatform.Services;
 
 public sealed class CallDetailRecordMap : ClassMap<CallDetailRecord>
 {
+    // NOTE: Having these stupid defaults id BAD. Proper logic how to handle this should be implemented - skipping, rejecting, whatever.
     public CallDetailRecordMap()
     {
-        Map(m => m.CallerId).Name("caller_id");
-        Map(m => m.Recipient).Name("recipient");
-        Map(m => m.CallDate).Name("call_date").TypeConverterOption.Format("dd/MM/yyyy");
-        Map(m => m.EndTime).Name("end_time").TypeConverter(new CustomTimeSpanConverter());
-        Map(m => m.Duration).Name("duration");
-        Map(m => m.Cost).Name("cost");
-        Map(m => m.Reference).Name("reference");
-        Map(m => m.Currency).Name("currency").TypeConverter<EnumConverter<Currency>>();
+        Map(m => m.CallerId).Name("caller_id").Default(0);
+        Map(m => m.Recipient).Name("recipient").Default(0);
+        Map(m => m.CallDate).Name("call_date").TypeConverterOption.Format("dd/MM/yyyy").Default(new DateOnly());
+        Map(m => m.EndTime).Name("end_time").TypeConverter(new CustomTimeSpanConverter()).Default(TimeSpan.Zero);
+        Map(m => m.Duration).Name("duration").Default(0);
+        Map(m => m.Cost).Name("cost").Default(0);
+        Map(m => m.Reference).Name("reference").Default(string.Empty);
+        Map(m => m.Currency).Name("currency").TypeConverter<EnumConverter<Currency>>().Default(Currency.Unknown);
     }
     
     private class CustomTimeSpanConverter : DefaultTypeConverter
