@@ -46,7 +46,7 @@ public class CostsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CostsEndpoints.GetCostsByCallerAndMonthAsync(6666, 2023, 10, dbContext, NullLogger.Instance);
+        var result = await CostsEndpoints.GetCostsByCallerAndMonthAsync(6666, 2023, 10, dbContext, NullLogger<CostsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>>(result);
@@ -64,7 +64,7 @@ public class CostsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CostsEndpoints.GetCostsByCallerAndMonthAsync(441215598896, 2023, 10, dbContext, NullLogger.Instance);
+        var result = await CostsEndpoints.GetCostsByCallerAndMonthAsync(441215598896, 2023, 10, dbContext, NullLogger<CostsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>>(result);
@@ -87,7 +87,7 @@ public class CostsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CostsEndpoints.GetCostsByCallerAndYearAsync(6666, 2023, dbContext, NullLogger.Instance);
+        var result = await CostsEndpoints.GetCostsByCallerAndYearAsync(6666, 2023, dbContext, NullLogger<CostsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>>(result);
@@ -105,7 +105,7 @@ public class CostsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CostsEndpoints.GetCostsByCallerAndYearAsync(441215598896, 2023, dbContext, NullLogger.Instance);
+        var result = await CostsEndpoints.GetCostsByCallerAndYearAsync(441215598896, 2023, dbContext, NullLogger<CostsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<decimal>>, ProblemHttpResult, NotFound>>(result);

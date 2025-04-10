@@ -44,7 +44,7 @@ public class RecordsEndpointsTests
         dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
 
         // Act
-        var result = RecordsEndpoints.GetRecordByReferenceAsync("NONEXISTENTREFERENCE123", dbContext, NullLogger.Instance);
+        var result = RecordsEndpoints.GetRecordByReferenceAsync("NONEXISTENTREFERENCE123", dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<CallDetailRecord>, ProblemHttpResult, NotFound>>(result);
@@ -62,7 +62,7 @@ public class RecordsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = RecordsEndpoints.GetRecordByReferenceAsync("C5DA9724701EEBBA95CA2CC5617BA93E4", dbContext, NullLogger.Instance);
+        var result = RecordsEndpoints.GetRecordByReferenceAsync("C5DA9724701EEBBA95CA2CC5617BA93E4", dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<CallDetailRecord>, ProblemHttpResult, NotFound>>(result);
@@ -94,7 +94,7 @@ public class RecordsEndpointsTests
             
 
         // Act
-        var result = await RecordsEndpoints.GetRecordsAsync(dbContext, NullLogger.Instance);
+        var result = await RecordsEndpoints.GetRecordsAsync(dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
             
         // Assert
         Assert.IsType<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>(result);
@@ -112,7 +112,7 @@ public class RecordsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await RecordsEndpoints.GetRecordsAsync(dbContext, NullLogger.Instance);
+        var result = await RecordsEndpoints.GetRecordsAsync(dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
             
         // Assert
         Assert.IsType<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>(result);
@@ -156,7 +156,7 @@ public class RecordsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await RecordsEndpoints.GetRecordsByCallerAsync(6666, dbContext, NullLogger.Instance);
+        var result = await RecordsEndpoints.GetRecordsByCallerAsync(6666, dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>(result);
@@ -173,7 +173,7 @@ public class RecordsEndpointsTests
         dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
         await dbContext.SaveChangesAsync();
         // Act
-        var result = await RecordsEndpoints.GetRecordsByCallerAsync(441215598896, dbContext, NullLogger.Instance);
+        var result = await RecordsEndpoints.GetRecordsByCallerAsync(441215598896, dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>(result);
@@ -204,7 +204,7 @@ public class RecordsEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await RecordsEndpoints.GetRecordsByCallerAndMonthAsync(441215598896, 2023, 11, dbContext, NullLogger.Instance);
+        var result = await RecordsEndpoints.GetRecordsByCallerAndMonthAsync(441215598896, 2023, 11, dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>(result);
@@ -221,7 +221,7 @@ public class RecordsEndpointsTests
         dbContext.CallDetailRecords.AddRange(_validCallDetailRecords);
         await dbContext.SaveChangesAsync();
         // Act
-        var result = await RecordsEndpoints.GetRecordsByCallerAndMonthAsync(441215598896, 2023, 10, dbContext, NullLogger.Instance);
+        var result = await RecordsEndpoints.GetRecordsByCallerAndMonthAsync(441215598896, 2023, 10, dbContext, NullLogger<RecordsEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<CallDetailRecord>>, ProblemHttpResult, NotFound>>(result);
