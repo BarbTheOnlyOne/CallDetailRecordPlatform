@@ -43,7 +43,7 @@ public class CurrenciesEndpointsTests
         var dbContext = new MockDb().CreateDbContext();
 
         // Act
-        var result = await CurrenciesEndpoints.GetCurrenciesAsync(dbContext, NullLogger.Instance);
+        var result = await CurrenciesEndpoints.GetCurrenciesAsync(dbContext, NullLogger<CurrenciesEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>>(result);
@@ -61,7 +61,7 @@ public class CurrenciesEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CurrenciesEndpoints.GetCurrenciesAsync(dbContext, NullLogger.Instance);
+        var result = await CurrenciesEndpoints.GetCurrenciesAsync(dbContext, NullLogger<CurrenciesEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>>(result);
@@ -83,7 +83,7 @@ public class CurrenciesEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CurrenciesEndpoints.GetCurrenciesByCallerAsync(6666, dbContext, NullLogger.Instance);
+        var result = await CurrenciesEndpoints.GetCurrenciesByCallerAsync(6666, dbContext, NullLogger<CurrenciesEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>>(result);
@@ -101,7 +101,7 @@ public class CurrenciesEndpointsTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await CurrenciesEndpoints.GetCurrenciesByCallerAsync(441215598896, dbContext, NullLogger.Instance);
+        var result = await CurrenciesEndpoints.GetCurrenciesByCallerAsync(441215598896, dbContext, NullLogger<CurrenciesEndpointsLoggerCategory>.Instance);
 
         // Assert
         Assert.IsType<Results<Ok<List<Currency>>, ProblemHttpResult, NotFound>>(result);
